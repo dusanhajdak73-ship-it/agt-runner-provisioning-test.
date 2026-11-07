@@ -1,0 +1,30 @@
+name: Hosted runner provisioning smoke test
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  runner-smoke:
+    name: Runner assignment - ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-24.04
+          - ubuntu-22.04
+          - windows-latest
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - name: Report runner allocation
+        shell: bash
+        run: |
+          echo "RUNNER_ASSIGNED=true"
+          echo "OS=${{ matrix.os }}"
+          echo "RUNNER_NAME=${RUNNER_NAME:-unknown}"
+          echo "RUNNER_OS=${RUNNER_OS:-unknown}"
+          echo "RUNNER_ARCH=${RUNNER_ARCH:-unknown}"
+          echo "GITHUB_RUN_ID=${GITHUB_RUN_ID}"
+          echo "No checkout, secrets, third-party actions, or project source are used."
